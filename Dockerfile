@@ -15,7 +15,7 @@ WORKDIR /app
 
 COPY ./app /app
 
-RUN celery multi start w1 -A app -l info
+RUN celery multi start w1 -A app -l info -Q celery, decks
 
 
 RUN adduser -D user

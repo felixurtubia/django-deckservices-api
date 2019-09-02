@@ -1,8 +1,11 @@
 from django.shortcuts import render
+from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from deck_app.serializers import UserSerializer, GroupSerializer, DeckSerializer, DeckCardSerializer, UserDeckSerializer, UserDeckDeepSerializer
 from deck_app.models import Deck, DeckCard, UserDeck
+
+from app.celery import send_user_deck
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -50,3 +53,8 @@ class UserDeckViewSet(viewsets.ModelViewSet):
             return UserDeckDeepSerializer
         else:
             return UserDeckSerializer
+    def list(self, request, *args, **kwargs):
+        res = self.serializer_class(self.queryset, many=True, context={'request': request})
+        send_user_deck.apply_async(args=res.data, queue='decks', routing_key='decks.tasks.first_task')
+        print("tarea enviada")
+        return Response(res.data)
