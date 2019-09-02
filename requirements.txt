@@ -1,2 +1,5 @@
 Django>=2.2.4,<2.3.0
 djangorestframework>=3.10.2,<3.11.0
+psycopg2-binary>=2.8.3
+pika>=1.1.0
+celery>=4.3.0,<4.4.0
