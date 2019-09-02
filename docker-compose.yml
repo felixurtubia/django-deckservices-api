@@ -7,17 +7,18 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+      - "5672:5672"
     volumes:
       - ./app:/app
       #- ./deck_app:/deck_app
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
-  rabbit_routing:
-    build:
-      context: .
-    ports:
-      - "127.0.0.1:8000:8000"
-    volumes:
-      - ./rabbit_routing:/rabbit_routing
-    command: >
-      sh -c "python listener.py"
+  #rabbit_routing:
+  #  build:
+  #    context: .
+  #  ports:
+  #    - "127.0.0.1:8000:8000"
+  #  volumes:
+  #    - ./rabbit_routing:/rabbit_routing
+  # command: >
+  #    sh -c "python listener.py"
